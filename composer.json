@@ -1,0 +1,12 @@
+{
+    "require": {
+        "yiisoft/yii2": "~2.0.0",
+        "yiibr/yii2-br-validator": "*"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}
