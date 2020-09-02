@@ -19,7 +19,7 @@ $config = [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost:3308;dbname=api',
+            'dsn' => 'mysql:host=localhost;dbname=api',
             'username' => 'root',
             'password' => '',
             'charset' => 'utf8',

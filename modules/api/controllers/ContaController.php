@@ -52,12 +52,49 @@ class ContaController extends \yii\web\Controller
                           ->from('vw_requerente')
                           ->andFilterWhere(['=', 'cpf', $content->cpf])
                           ->one();
-                if(Yii::$app->getSecurity()->validatePassword($content->senha, $model['senha']))
+                if($model && Yii::$app->getSecurity()->validatePassword($content->senha, $model['senha']))
                 {
                     return $model;
                 }else{
                     $response->statusCode = 400;
                     return ['errors' => 'Credenciais inválidas'];
+                }
+                
+                
+            }else{
+                $response->statusCode = 400;
+                return ['errors' => 'Dados Inválidos'];
+            }
+            
+        } catch (\yii\base\Exception $e) {
+            $response->statusCode = 500;
+            return ['errors' => 'Desculpe Ocorreu um erro!'];
+            
+        }
+        
+    }
+    
+    public function actionLogin2()
+    {
+        $request = Yii::$app->request;
+        $response = Yii::$app->response;
+        
+        try 
+        {
+
+            $content = json_decode($request->getRawBody());
+            if(isset($content->cpf) && isset($content->senha))
+            {
+                $model = (new Query())
+                          ->from('vw_requerente')
+                          ->andFilterWhere(['=', 'cpf', $content->cpf])
+                          ->one();
+                if($model && Yii::$app->getSecurity()->validatePassword($content->senha, $model['senha']))
+                {
+                    return $model;
+                }else{
+                    $response->statusCode = 400;
+                    return ['Credenciais inválidas'];
                 }
                 
                 

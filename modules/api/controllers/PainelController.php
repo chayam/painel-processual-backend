@@ -9,8 +9,23 @@ use yii\filters\VerbFilter;
 use yii\db\Query;
 use Yii;
 
-class PainelController extends \yii\web\Controller
-{
+class PainelController extends \yii\web\Controller {
+
+    public function init() {
+        parent::init();
+        try {
+            if (isset(Yii::$app->session->id)) { 
+            session_write_close();
+            session_start();
+            session_regenerate_id(true);
+            ob_start();
+        }
+        } catch (\Exception $e) {
+            //echo $e->getMessage();
+        }
+            
+    }
+
     public function behaviors() {
         return [
             'verbs' => [
@@ -35,98 +50,77 @@ class PainelController extends \yii\web\Controller
             ]
         ];
     }
-    
-    public function actionRequerenteProcesso()
-    {
+
+    public function actionRequerenteProcesso() {
         $request = Yii::$app->request;
         $response = Yii::$app->response;
-        
-        try 
-        {
+
+        try {
 
             $content = json_decode($request->getRawBody());
-            if(isset($content->requerente_id))
-            {
+            if (isset($content->requerente_id)) {
                 $model = (new Query())
-                          ->from('vw_painel_qtd')
-                          ->andFilterWhere(['=', 'requerente_id', $content->requerente_id])
-                          ->one();
-                
+                        ->from('vw_painel_qtd')
+                        ->andFilterWhere(['=', 'requerente_id', $content->requerente_id])
+                        ->one();
+
                 return $model;
-                
-            }else{
+            } else {
                 $response->statusCode = 400;
                 return ['errors' => 'Dados Inválidos'];
             }
-            
         } catch (\Exception $e) {
             $response->statusCode = 500;
             return ['errors' => 'Desculpe Ocorreu um erro!'];
-            
         }
-        
     }
-    
-    public function actionRequerenteAssunto()
-    {
+
+    public function actionRequerenteAssunto() {
         $request = Yii::$app->request;
         $response = Yii::$app->response;
-        
-        try 
-        {
+
+        try {
 
             $content = json_decode($request->getRawBody());
-            if(isset($content->requerente_id))
-            {
+            if (isset($content->requerente_id)) {
                 $model = (new Query())
-                          ->from('vw_painel_assunto_qtd')
-                          ->andFilterWhere(['=', 'requerente_id', $content->requerente_id])
-                          ->one();
-                
+                        ->from('vw_painel_assunto_qtd')
+                        ->andFilterWhere(['=', 'requerente_id', $content->requerente_id])
+                        ->one();
+
                 return $model;
-                
-            }else{
+            } else {
                 $response->statusCode = 400;
                 return ['errors' => 'Dados Inválidos'];
             }
-            
         } catch (\yii\base\Exception $e) {
             $response->statusCode = 500;
             return ['errors' => 'Desculpe Ocorreu um erro!'];
-            
         }
-        
     }
-    
-    public function actionRequerenteAno()
-    {
+
+    public function actionRequerenteAno() {
         $request = Yii::$app->request;
         $response = Yii::$app->response;
-        
-        try 
-        {
+
+        try {
 
             $content = json_decode($request->getRawBody());
-            if(isset($content->requerente_id))
-            {
+            if (isset($content->requerente_id)) {
                 $model = (new Query())
-                          ->from('vw_painel_req_proc_ano')
-                          ->andFilterWhere(['=', 'requerente_id', $content->requerente_id])
-                          ->one();
-                
+                        ->from('vw_painel_req_proc_ano')
+                        ->andFilterWhere(['=', 'requerente_id', $content->requerente_id])
+                        ->one();
+
                 return $model;
-                
-            }else{
+            } else {
                 $response->statusCode = 400;
                 return ['errors' => 'Dados Inválidos'];
             }
-            
         } catch (\yii\base\Exception $e) {
             $response->statusCode = 500;
             return ['errors' => 'Desculpe Ocorreu um erro!'];
-            
         }
-        
     }
 
 }

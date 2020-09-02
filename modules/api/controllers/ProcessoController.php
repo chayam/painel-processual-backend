@@ -13,6 +13,20 @@ use yii\db\Query;
 
 class ProcessoController extends \yii\web\Controller
 {
+	public function init() {
+        parent::init();
+        try {
+            if (isset(Yii::$app->session->id)) { 
+            session_write_close();
+            session_start();
+            session_regenerate_id(true);
+            ob_start();
+        }
+        } catch (\Exception $e) {
+            //echo $e->getMessage();
+        }
+            
+    }
     public function behaviors() {
         return [
             'verbs' => [
@@ -128,17 +142,20 @@ class ProcessoController extends \yii\web\Controller
         try 
         {
             $content = json_decode($request->getRawBody());
+			
             if(isset($content->id))
             {
                 $model = $this->findModel($content->id);
                 $model->attributes = ArrayHelper::toArray(json_decode($request->getRawBody()));
-                if ($model->update()) {
+
+                if ($model->validate()) {
 
                     $response->statusCode = 200;
+                    $model->update(false);
                     return $model;
                 } else {
                     $response->statusCode = 400;
-                   return ['errors' => $model->errors];
+                   return [$model->errors];
                 }
                 
 
@@ -149,7 +166,6 @@ class ProcessoController extends \yii\web\Controller
             
         } catch (\Exception $e) {
             $response->statusCode = 500;
-            var_dump($e->getMessage());exit;
             return ['errors' => 'Desculpe Ocorreu um erro!'];
         }
 

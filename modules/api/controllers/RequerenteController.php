@@ -127,6 +127,22 @@ class RequerenteController extends Controller
         }
     }
     
+    public function actionCreate2() {
+        $request = Yii::$app->request;
+        $response = Yii::$app->response;
+
+        $model = new Requerente();
+        $model->attributes = ArrayHelper::toArray(json_decode($request->getRawBody()));
+        if ($model->save()) {
+
+            $response->statusCode = 200;
+            return ['msg'=>'Requerente criado com sucesso!'];
+        } else {
+            $response->statusCode = 400;
+           return [$model->errors];
+        }
+    }
+    
     public function actionUpdate($id) {
         $request = Yii::$app->request;
         $response = Yii::$app->response;

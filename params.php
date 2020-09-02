@@ -2,5 +2,5 @@
 
 return [
     // informe seu token.
-    'token'=>''
+    'token'=>'informeaquiseutoken'
 ];

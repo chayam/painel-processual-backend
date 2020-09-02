@@ -11,6 +11,20 @@ use Yii;
 
 class AssuntoController extends \yii\web\Controller
 {
+	public function init() {
+        parent::init();
+        try {
+            if (isset(Yii::$app->session->id)) { 
+            session_write_close();
+            session_start();
+            session_regenerate_id(true);
+            ob_start();
+        }
+        } catch (\Exception $e) {
+            //echo $e->getMessage();
+        }
+            
+    }
     public function behaviors() {
         return [
             'verbs' => [

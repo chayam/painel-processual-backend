@@ -37,9 +37,9 @@ class Requerente extends \yii\db\ActiveRecord
     {
         return [
             [['nome', 'cpf', 'email','senha'], 'required'],
-            [['cpf','email'], 'unique', 'message' => utf8_encode('"{attribute}" já é utilizado por outro usuário.'),'filter' => ['ativo'=>1]],
+            [['cpf','email'], 'unique', 'message' => '"{attribute}" já é utilizado por outro usuário.','filter' => ['ativo'=>1]],
             ['email', 'email'],
-            ['cpf', CpfValidator::className(),'message' =>utf8_encode('"{attribute}" é inválido')],
+            ['cpf', CpfValidator::className(),'message' =>'"{attribute}" é inválido'],
             //['cpf', 'unique', 'filter' => ['ativo'=>1],'message'=>utf8_encode('CPF já cadastrado')],
             [['ativo'], 'integer'],
             [['dt_aniversario'], 'date', 'format' => 'yyyy-MM-dd'],
