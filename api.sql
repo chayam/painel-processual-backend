@@ -134,16 +134,7 @@ CREATE TABLE `log_processo` (
   CONSTRAINT `fk_log_processo_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
---
--- Dumping data for table `log_processo`
---
 
-/*!40000 ALTER TABLE `log_processo` DISABLE KEYS */;
-INSERT INTO `log_processo` (`id`,`processo_id`,`status_id`,`descricao`,`observacao`,`ativo`,`dt_criacao`) VALUES 
- (39,24,1,0x7465737465,0x616263313233,1,'2020-08-31 13:39:46'),
- (40,24,1,0x7465737465,0x616263313232,1,'2020-08-31 13:40:18'),
- (41,24,1,0x7465737465,0x616263313231,1,'2020-08-31 13:40:50');
-/*!40000 ALTER TABLE `log_processo` ENABLE KEYS */;
 
 
 --
@@ -195,14 +186,6 @@ CREATE TABLE `processo` (
   CONSTRAINT `fk_processo_usuario1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
---
--- Dumping data for table `processo`
---
-
-/*!40000 ALTER TABLE `processo` DISABLE KEYS */;
-INSERT INTO `processo` (`id`,`requerente_id`,`usuario_id`,`assunto_id`,`status_id`,`numero`,`descricao`,`observacao`,`dt_criacao`) VALUES 
- (24,20,NULL,1,1,20201,0x7465737465,0x616263313231,'2020-08-31 13:39:46');
-/*!40000 ALTER TABLE `processo` ENABLE KEYS */;
 
 
 --
@@ -256,15 +239,6 @@ CREATE TABLE `requerente` (
   `senha` varchar(100) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `requerente`
---
-
-/*!40000 ALTER TABLE `requerente` DISABLE KEYS */;
-INSERT INTO `requerente` (`id`,`nome`,`cpf`,`telefone`,`email`,`dt_aniversario`,`dt_criacao`,`ativo`,`senha`) VALUES 
- (20,0x4C7569732043686179616D,0x3031313431393235323930,NULL,0x6C75697363686179616D323040676D61696C2E636F6D,NULL,'2020-08-31 11:12:47',1,0x2432792431332479716654754E5547646841345275636851445169714F7473443258504F766A734C7657623570524C316371426A674131693133312E);
-/*!40000 ALTER TABLE `requerente` ENABLE KEYS */;
 
 
 --
@@ -335,16 +309,6 @@ CREATE TABLE `usuario` (
   CONSTRAINT `fk_usuario_perfil1` FOREIGN KEY (`perfil_id`) REFERENCES `perfil` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_usuario_setor1` FOREIGN KEY (`setor_id`) REFERENCES `setor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `usuario`
---
-
-/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` (`id`,`perfil_id`,`setor_id`,`nome`,`email`,`matricula`,`senha`,`ativo`,`dt_criacao`) VALUES 
- (1,1,2,0x4A6F63656C69,0x6A6F63656C692E70696D656E746140676D61696C2E636F6D,1,0x616263313233,1,'2020-08-19 18:30:44');
-/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
-
 
 --
 -- Definition of view `vw_painel_assunto_qtd`
