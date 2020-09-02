@@ -1,21 +1,101 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.7.28
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 
 --
--- Banco de dados: `api`
+-- Create schema apiportfolio
 --
 
--- --------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS apiportfolio;
+USE apiportfolio;
 
 --
--- Estrutura da tabela `assunto`
+-- Temporary table structure for view `vw_painel_assunto_qtd`
+--
+DROP TABLE IF EXISTS `vw_painel_assunto_qtd`;
+DROP VIEW IF EXISTS `vw_painel_assunto_qtd`;
+CREATE TABLE `vw_painel_assunto_qtd` (
+  `requerente_id` int(11),
+  `assunto` varchar(343),
+  `qtds` varchar(343)
+);
+
+--
+-- Temporary table structure for view `vw_painel_qtd`
+--
+DROP TABLE IF EXISTS `vw_painel_qtd`;
+DROP VIEW IF EXISTS `vw_painel_qtd`;
+CREATE TABLE `vw_painel_qtd` (
+  `requerente_id` int(11),
+  `aberto` bigint(21),
+  `analise` bigint(21),
+  `finalizado` bigint(21)
+);
+
+--
+-- Temporary table structure for view `vw_painel_req_proc_ano`
+--
+DROP TABLE IF EXISTS `vw_painel_req_proc_ano`;
+DROP VIEW IF EXISTS `vw_painel_req_proc_ano`;
+CREATE TABLE `vw_painel_req_proc_ano` (
+  `requerente_id` int(11),
+  `ano` varchar(343),
+  `qtd` varchar(343)
+);
+
+--
+-- Temporary table structure for view `vw_processos`
+--
+DROP TABLE IF EXISTS `vw_processos`;
+DROP VIEW IF EXISTS `vw_processos`;
+CREATE TABLE `vw_processos` (
+  `id` int(11),
+  `requerente_id` int(11),
+  `usuario_id` int(11),
+  `analista` varchar(100),
+  `assunto_id` int(11),
+  `assunto` varchar(300),
+  `status_id` int(11),
+  `status` varchar(45),
+  `numero` int(11),
+  `descricao` varchar(100),
+  `observacao` text,
+  `dt_criacao` timestamp
+);
+
+--
+-- Temporary table structure for view `vw_requerente`
+--
+DROP TABLE IF EXISTS `vw_requerente`;
+DROP VIEW IF EXISTS `vw_requerente`;
+CREATE TABLE `vw_requerente` (
+  `id` int(11),
+  `nome` varchar(100),
+  `cpf` varchar(11),
+  `telefone` varchar(14),
+  `email` varchar(100),
+  `senha` varchar(100),
+  `dt_aniversario` varchar(10)
+);
+
+--
+-- Definition of table `assunto`
 --
 
 DROP TABLE IF EXISTS `assunto`;
-CREATE TABLE IF NOT EXISTS `assunto` (
+CREATE TABLE `assunto` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `descricao` varchar(300) COLLATE utf8_bin NOT NULL,
   `ativo` tinyint(4) NOT NULL DEFAULT '1',
@@ -23,22 +103,23 @@ CREATE TABLE IF NOT EXISTS `assunto` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Extraindo dados da tabela `assunto`
+-- Dumping data for table `assunto`
 --
 
-INSERT INTO `assunto` (`id`, `descricao`, `ativo`) VALUES
-(1, 'Solicitação de Férias', 1),
-(2, 'Certidão Negativa', 1),
-(3, 'Aposentadoria', 1);
+/*!40000 ALTER TABLE `assunto` DISABLE KEYS */;
+INSERT INTO `assunto` (`id`,`descricao`,`ativo`) VALUES 
+ (1,0x536F6C6963697461C3A7C3A36F2064652046C3A972696173,1),
+ (2,0x436572746964C3A36F204E65676174697661,1),
+ (3,0x41706F73656E7461646F726961,1);
+/*!40000 ALTER TABLE `assunto` ENABLE KEYS */;
 
--- --------------------------------------------------------
 
 --
--- Estrutura da tabela `log_processo`
+-- Definition of table `log_processo`
 --
 
 DROP TABLE IF EXISTS `log_processo`;
-CREATE TABLE IF NOT EXISTS `log_processo` (
+CREATE TABLE `log_processo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `processo_id` int(11) NOT NULL,
   `status_id` int(11) NOT NULL,
@@ -48,18 +129,29 @@ CREATE TABLE IF NOT EXISTS `log_processo` (
   `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_log_processo_processo1_idx` (`processo_id`),
-  KEY `fk_log_processo_status1_idx` (`status_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-
--- --------------------------------------------------------
+  KEY `fk_log_processo_status1_idx` (`status_id`),
+  CONSTRAINT `fk_log_processo_processo1` FOREIGN KEY (`processo_id`) REFERENCES `processo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_log_processo_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Estrutura da tabela `perfil`
+-- Dumping data for table `log_processo`
+--
+
+/*!40000 ALTER TABLE `log_processo` DISABLE KEYS */;
+INSERT INTO `log_processo` (`id`,`processo_id`,`status_id`,`descricao`,`observacao`,`ativo`,`dt_criacao`) VALUES 
+ (39,24,1,0x7465737465,0x616263313233,1,'2020-08-31 13:39:46'),
+ (40,24,1,0x7465737465,0x616263313232,1,'2020-08-31 13:40:18'),
+ (41,24,1,0x7465737465,0x616263313231,1,'2020-08-31 13:40:50');
+/*!40000 ALTER TABLE `log_processo` ENABLE KEYS */;
+
+
+--
+-- Definition of table `perfil`
 --
 
 DROP TABLE IF EXISTS `perfil`;
-CREATE TABLE IF NOT EXISTS `perfil` (
+CREATE TABLE `perfil` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(70) COLLATE utf8_bin NOT NULL,
   `ativo` tinyint(4) NOT NULL DEFAULT '1',
@@ -67,21 +159,22 @@ CREATE TABLE IF NOT EXISTS `perfil` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Extraindo dados da tabela `perfil`
+-- Dumping data for table `perfil`
 --
 
-INSERT INTO `perfil` (`id`, `nome`, `ativo`) VALUES
-(1, 'Administrador', 1),
-(2, 'Analista', 1);
+/*!40000 ALTER TABLE `perfil` DISABLE KEYS */;
+INSERT INTO `perfil` (`id`,`nome`,`ativo`) VALUES 
+ (1,0x41646D696E6973747261646F72,1),
+ (2,0x416E616C69737461,1);
+/*!40000 ALTER TABLE `perfil` ENABLE KEYS */;
 
--- --------------------------------------------------------
 
 --
--- Estrutura da tabela `processo`
+-- Definition of table `processo`
 --
 
 DROP TABLE IF EXISTS `processo`;
-CREATE TABLE IF NOT EXISTS `processo` (
+CREATE TABLE `processo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `requerente_id` int(11) NOT NULL,
   `usuario_id` int(11) DEFAULT NULL,
@@ -95,22 +188,46 @@ CREATE TABLE IF NOT EXISTS `processo` (
   KEY `fk_processo_status1_idx` (`status_id`),
   KEY `fk_processo_requerente1_idx` (`requerente_id`),
   KEY `fk_processo_assunto1_idx` (`assunto_id`),
-  KEY `fk_processo_usuario1_idx` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  KEY `fk_processo_usuario1_idx` (`usuario_id`),
+  CONSTRAINT `fk_processo_assunto1` FOREIGN KEY (`assunto_id`) REFERENCES `assunto` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_processo_requerente1` FOREIGN KEY (`requerente_id`) REFERENCES `requerente` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_processo_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_processo_usuario1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Acionadores `processo`
+-- Dumping data for table `processo`
 --
-DROP TRIGGER IF EXISTS `processo_AFTER_INSERT`;
+
+/*!40000 ALTER TABLE `processo` DISABLE KEYS */;
+INSERT INTO `processo` (`id`,`requerente_id`,`usuario_id`,`assunto_id`,`status_id`,`numero`,`descricao`,`observacao`,`dt_criacao`) VALUES 
+ (24,20,NULL,1,1,20201,0x7465737465,0x616263313231,'2020-08-31 13:39:46');
+/*!40000 ALTER TABLE `processo` ENABLE KEYS */;
+
+
+--
+-- Definition of trigger `processo_AFTER_INSERT`
+--
+
+DROP TRIGGER /*!50030 IF EXISTS */ `processo_AFTER_INSERT`;
+
 DELIMITER $$
-CREATE TRIGGER `processo_AFTER_INSERT` AFTER INSERT ON `processo` FOR EACH ROW BEGIN
+
+CREATE  TRIGGER `processo_AFTER_INSERT` AFTER INSERT ON `processo` FOR EACH ROW BEGIN
 	INSERT INTO log_processo (processo_id,status_id,descricao,observacao) VALUES (NEW.id,new.status_id,new.descricao,new.observacao);
-END
-$$
+END $$
+
 DELIMITER ;
-DROP TRIGGER IF EXISTS `processo_AFTER_UPDATE`;
+
+--
+-- Definition of trigger `processo_AFTER_UPDATE`
+--
+
+DROP TRIGGER /*!50030 IF EXISTS */ `processo_AFTER_UPDATE`;
+
 DELIMITER $$
-CREATE TRIGGER `processo_AFTER_UPDATE` AFTER UPDATE ON `processo` FOR EACH ROW BEGIN
+
+CREATE  TRIGGER `processo_AFTER_UPDATE` AFTER UPDATE ON `processo` FOR EACH ROW BEGIN
 	if(new.status_id <> old.status_id) then
 		INSERT INTO log_processo (processo_id,status_id,descricao,observacao) VALUES (NEW.id,new.status_id,new.descricao,new.observacao);
     elseif ((new.descricao <> old.descricao)) THEN
@@ -118,18 +235,16 @@ CREATE TRIGGER `processo_AFTER_UPDATE` AFTER UPDATE ON `processo` FOR EACH ROW B
     elseif ((new.observacao <> old.observacao)) THEN
 		INSERT INTO log_processo (processo_id,status_id,descricao,observacao) VALUES (NEW.id,new.status_id,new.descricao,new.observacao);
     end if;
-END
-$$
+END $$
+
 DELIMITER ;
 
--- --------------------------------------------------------
-
 --
--- Estrutura da tabela `requerente`
+-- Definition of table `requerente`
 --
 
 DROP TABLE IF EXISTS `requerente`;
-CREATE TABLE IF NOT EXISTS `requerente` (
+CREATE TABLE `requerente` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) COLLATE utf8_bin NOT NULL,
   `cpf` varchar(11) COLLATE utf8_bin NOT NULL,
@@ -140,17 +255,24 @@ CREATE TABLE IF NOT EXISTS `requerente` (
   `ativo` tinyint(4) NOT NULL DEFAULT '1',
   `senha` varchar(100) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Estrutura da tabela `setor`
+-- Dumping data for table `requerente`
+--
+
+/*!40000 ALTER TABLE `requerente` DISABLE KEYS */;
+INSERT INTO `requerente` (`id`,`nome`,`cpf`,`telefone`,`email`,`dt_aniversario`,`dt_criacao`,`ativo`,`senha`) VALUES 
+ (20,0x4C7569732043686179616D,0x3031313431393235323930,NULL,0x6C75697363686179616D323040676D61696C2E636F6D,NULL,'2020-08-31 11:12:47',1,0x2432792431332479716654754E5547646841345275636851445169714F7473443258504F766A734C7657623570524C316371426A674131693133312E);
+/*!40000 ALTER TABLE `requerente` ENABLE KEYS */;
+
+
+--
+-- Definition of table `setor`
 --
 
 DROP TABLE IF EXISTS `setor`;
-CREATE TABLE IF NOT EXISTS `setor` (
+CREATE TABLE `setor` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) COLLATE utf8_bin NOT NULL,
   `ativo` tinyint(4) NOT NULL DEFAULT '1',
@@ -158,21 +280,22 @@ CREATE TABLE IF NOT EXISTS `setor` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Extraindo dados da tabela `setor`
+-- Dumping data for table `setor`
 --
 
-INSERT INTO `setor` (`id`, `nome`, `ativo`) VALUES
-(1, 'Tecnologia da Informação', 1),
-(2, 'Recursos Humanos', 1);
+/*!40000 ALTER TABLE `setor` DISABLE KEYS */;
+INSERT INTO `setor` (`id`,`nome`,`ativo`) VALUES 
+ (1,0x5465636E6F6C6F67696120646120496E666F726D61C3A7C3A36F,1),
+ (2,0x5265637572736F732048756D616E6F73,1);
+/*!40000 ALTER TABLE `setor` ENABLE KEYS */;
 
--- --------------------------------------------------------
 
 --
--- Estrutura da tabela `status`
+-- Definition of table `status`
 --
 
 DROP TABLE IF EXISTS `status`;
-CREATE TABLE IF NOT EXISTS `status` (
+CREATE TABLE `status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) COLLATE utf8_bin NOT NULL,
   `ativo` tinyint(4) NOT NULL DEFAULT '1',
@@ -180,22 +303,23 @@ CREATE TABLE IF NOT EXISTS `status` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Extraindo dados da tabela `status`
+-- Dumping data for table `status`
 --
 
-INSERT INTO `status` (`id`, `nome`, `ativo`) VALUES
-(1, 'Em aberto', 1),
-(2, 'Em análise', 1),
-(3, 'Finalizado', 1);
+/*!40000 ALTER TABLE `status` DISABLE KEYS */;
+INSERT INTO `status` (`id`,`nome`,`ativo`) VALUES 
+ (1,0x456D2061626572746F,1),
+ (2,0x456D20616EC3A16C697365,1),
+ (3,0x46696E616C697A61646F,1);
+/*!40000 ALTER TABLE `status` ENABLE KEYS */;
 
--- --------------------------------------------------------
 
 --
--- Estrutura da tabela `usuario`
+-- Definition of table `usuario`
 --
 
 DROP TABLE IF EXISTS `usuario`;
-CREATE TABLE IF NOT EXISTS `usuario` (
+CREATE TABLE `usuario` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `perfil_id` int(11) NOT NULL,
   `setor_id` int(11) NOT NULL,
@@ -207,168 +331,67 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `dt_criacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_usuario_perfil1_idx` (`perfil_id`),
-  KEY `fk_usuario_setor1_idx` (`setor_id`)
+  KEY `fk_usuario_setor1_idx` (`setor_id`),
+  CONSTRAINT `fk_usuario_perfil1` FOREIGN KEY (`perfil_id`) REFERENCES `perfil` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_usuario_setor1` FOREIGN KEY (`setor_id`) REFERENCES `setor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Extraindo dados da tabela `usuario`
+-- Dumping data for table `usuario`
 --
 
-INSERT INTO `usuario` (`id`, `perfil_id`, `setor_id`, `nome`, `email`, `matricula`, `senha`, `ativo`, `dt_criacao`) VALUES
-(1, 1, 2, 'Joceli', 'joceli.pimenta@gmail.com', 1, 'abc123', 1, '2020-08-19 21:30:44');
+/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+INSERT INTO `usuario` (`id`,`perfil_id`,`setor_id`,`nome`,`email`,`matricula`,`senha`,`ativo`,`dt_criacao`) VALUES 
+ (1,1,2,0x4A6F63656C69,0x6A6F63656C692E70696D656E746140676D61696C2E636F6D,1,0x616263313233,1,'2020-08-19 18:30:44');
+/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
--- --------------------------------------------------------
-
---
--- Estrutura stand-in para vista `vw_painel_assunto_qtd`
--- (Veja abaixo para a view atual)
---
-DROP VIEW IF EXISTS `vw_painel_assunto_qtd`;
-CREATE TABLE IF NOT EXISTS `vw_painel_assunto_qtd` (
-`requerente_id` int(11)
-,`assunto` varchar(343)
-,`qtds` varchar(258)
-);
-
--- --------------------------------------------------------
 
 --
--- Estrutura stand-in para vista `vw_painel_qtd`
--- (Veja abaixo para a view atual)
+-- Definition of view `vw_painel_assunto_qtd`
 --
-DROP VIEW IF EXISTS `vw_painel_qtd`;
-CREATE TABLE IF NOT EXISTS `vw_painel_qtd` (
-`requerente_id` int(11)
-,`aberto` bigint(21)
-,`analise` bigint(21)
-,`finalizado` bigint(21)
-);
 
--- --------------------------------------------------------
-
---
--- Estrutura stand-in para vista `vw_painel_req_proc_ano`
--- (Veja abaixo para a view atual)
---
-DROP VIEW IF EXISTS `vw_painel_req_proc_ano`;
-CREATE TABLE IF NOT EXISTS `vw_painel_req_proc_ano` (
-`requerente_id` int(11)
-,`ano` varchar(258)
-,`qtd` varchar(258)
-);
-
--- --------------------------------------------------------
-
---
--- Estrutura stand-in para vista `vw_processos`
--- (Veja abaixo para a view atual)
---
-DROP VIEW IF EXISTS `vw_processos`;
-CREATE TABLE IF NOT EXISTS `vw_processos` (
-`id` int(11)
-,`requerente_id` int(11)
-,`usuario_id` int(11)
-,`analista` varchar(100)
-,`assunto_id` int(11)
-,`assunto` varchar(300)
-,`status_id` int(11)
-,`status` varchar(45)
-,`numero` int(11)
-,`descricao` varchar(100)
-,`observacao` text
-,`dt_criacao` timestamp
-);
-
--- --------------------------------------------------------
-
---
--- Estrutura stand-in para vista `vw_requerente`
--- (Veja abaixo para a view atual)
---
-DROP VIEW IF EXISTS `vw_requerente`;
-CREATE TABLE IF NOT EXISTS `vw_requerente` (
-`id` int(11)
-,`nome` varchar(100)
-,`cpf` varchar(11)
-,`telefone` varchar(14)
-,`email` varchar(100)
-,`senha` varchar(100)
-,`dt_aniversario` varchar(10)
-);
-
--- --------------------------------------------------------
-
---
--- Estrutura para vista `vw_painel_assunto_qtd`
---
 DROP TABLE IF EXISTS `vw_painel_assunto_qtd`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_painel_assunto_qtd`  AS  select `a`.`requerente_id` AS `requerente_id`,concat('[',group_concat(concat('\'',`a`.`descricao`,'\'') separator ', '),']') AS `assunto`,concat('[',group_concat(`a`.`qtd` separator ', '),']') AS `qtds` from (select `b`.`requerente_id` AS `requerente_id`,`b`.`assunto_id` AS `assunto_id`,`a`.`descricao` AS `descricao`,count(0) AS `qtd` from ((`assunto` `a` join `processo` `b` on((`b`.`assunto_id` = `a`.`id`))) join `requerente` `c` on((`b`.`requerente_id` = `c`.`id`))) group by `b`.`requerente_id`,`b`.`assunto_id`) `a` group by `a`.`requerente_id` order by `a`.`requerente_id` ;
-
--- --------------------------------------------------------
+DROP VIEW IF EXISTS `vw_painel_assunto_qtd`;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_painel_assunto_qtd` AS select `sb`.`requerente_id` AS `requerente_id`,concat('[',group_concat(concat('"',`sb`.`assunto`,'"') order by `sb`.`requerente_id` ASC,`sb`.`assunto` ASC separator ', '),']') AS `assunto`,concat('[',group_concat(concat('"',`sb`.`qtds`,'"') order by `sb`.`requerente_id` ASC,`sb`.`assunto` ASC separator ', '),']') AS `qtds` from (select `a`.`requerente_id` AS `requerente_id`,`a`.`assunto` AS `assunto`,`a`.`qtds` AS `qtds` from (select `b`.`requerente_id` AS `requerente_id`,`a`.`descricao` AS `assunto`,NULL AS `qtds` from ((`apiportfolio`.`assunto` `a` join `apiportfolio`.`processo` `b` on((`b`.`assunto_id` = `a`.`id`))) join `apiportfolio`.`requerente` `c` on((`b`.`requerente_id` = `c`.`id`))) group by `b`.`requerente_id`,`b`.`assunto_id`) `a` union all select `b`.`requerente_id` AS `requerente_id`,`b`.`assunto` AS `assunto`,`b`.`qtds` AS `qtds` from (select `b`.`requerente_id` AS `requerente_id`,NULL AS `assunto`,count(0) AS `qtds` from ((`apiportfolio`.`assunto` `a` join `apiportfolio`.`processo` `b` on((`b`.`assunto_id` = `a`.`id`))) join `apiportfolio`.`requerente` `c` on((`b`.`requerente_id` = `c`.`id`))) group by `b`.`requerente_id`,`b`.`assunto_id`) `b`) `sb` group by `sb`.`requerente_id`;
 
 --
--- Estrutura para vista `vw_painel_qtd`
+-- Definition of view `vw_painel_qtd`
 --
+
 DROP TABLE IF EXISTS `vw_painel_qtd`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_painel_qtd`  AS  select `a`.`id` AS `requerente_id`,(select count(0) from `processo` `sb` where ((`sb`.`requerente_id` = `a`.`id`) and (`sb`.`status_id` = 1))) AS `aberto`,(select count(0) from `processo` `sb` where ((`sb`.`requerente_id` = `a`.`id`) and (`sb`.`status_id` = 2))) AS `analise`,(select count(0) from `processo` `sb` where ((`sb`.`requerente_id` = `a`.`id`) and (`sb`.`status_id` = 3))) AS `finalizado` from `requerente` `a` ;
-
--- --------------------------------------------------------
+DROP VIEW IF EXISTS `vw_painel_qtd`;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_painel_qtd` AS select `a`.`id` AS `requerente_id`,(select count(0) from `processo` `sb` where ((`sb`.`requerente_id` = `a`.`id`) and (`sb`.`status_id` = 1))) AS `aberto`,(select count(0) from `processo` `sb` where ((`sb`.`requerente_id` = `a`.`id`) and (`sb`.`status_id` = 2))) AS `analise`,(select count(0) from `processo` `sb` where ((`sb`.`requerente_id` = `a`.`id`) and (`sb`.`status_id` = 3))) AS `finalizado` from `requerente` `a`;
 
 --
--- Estrutura para vista `vw_painel_req_proc_ano`
+-- Definition of view `vw_painel_req_proc_ano`
 --
+
 DROP TABLE IF EXISTS `vw_painel_req_proc_ano`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_painel_req_proc_ano`  AS  select `a`.`requerente_id` AS `requerente_id`,concat('[',group_concat(concat('\'',`a`.`ano`,'\'') separator ', '),']') AS `ano`,concat('[',group_concat(`a`.`qtd` separator ', '),']') AS `qtd` from (select `a`.`requerente_id` AS `requerente_id`,date_format(`a`.`dt_criacao`,'%Y') AS `ano`,count(0) AS `qtd` from `processo` `a` group by `a`.`requerente_id`,date_format(`a`.`dt_criacao`,'%Y') order by `a`.`dt_criacao`) `a` group by `a`.`requerente_id` ;
-
--- --------------------------------------------------------
+DROP VIEW IF EXISTS `vw_painel_req_proc_ano`;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_painel_req_proc_ano` AS select `a`.`requerente_id` AS `requerente_id`,concat('[',group_concat(concat('"',`a`.`ano`,'"') separator ', '),']') AS `ano`,concat('[',group_concat(`a`.`qtd` separator ', '),']') AS `qtd` from (select `a`.`requerente_id` AS `requerente_id`,date_format(`a`.`dt_criacao`,'%Y') AS `ano`,count(0) AS `qtd` from `apiportfolio`.`processo` `a` group by `a`.`requerente_id`,date_format(`a`.`dt_criacao`,'%Y') order by `a`.`dt_criacao`) `a` group by `a`.`requerente_id`;
 
 --
--- Estrutura para vista `vw_processos`
+-- Definition of view `vw_processos`
 --
+
 DROP TABLE IF EXISTS `vw_processos`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_processos`  AS  select `a`.`id` AS `id`,`a`.`requerente_id` AS `requerente_id`,`a`.`usuario_id` AS `usuario_id`,`e`.`nome` AS `analista`,`a`.`assunto_id` AS `assunto_id`,`c`.`descricao` AS `assunto`,`a`.`status_id` AS `status_id`,`d`.`nome` AS `status`,`a`.`numero` AS `numero`,`a`.`descricao` AS `descricao`,`a`.`observacao` AS `observacao`,`a`.`dt_criacao` AS `dt_criacao` from ((((`processo` `a` join `requerente` `b` on((`a`.`requerente_id` = `b`.`id`))) join `assunto` `c` on((`a`.`assunto_id` = `c`.`id`))) join `status` `d` on((`a`.`status_id` = `d`.`id`))) left join `usuario` `e` on((`a`.`usuario_id` = `e`.`id`))) ;
-
--- --------------------------------------------------------
+DROP VIEW IF EXISTS `vw_processos`;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_processos` AS select `a`.`id` AS `id`,`a`.`requerente_id` AS `requerente_id`,`a`.`usuario_id` AS `usuario_id`,`e`.`nome` AS `analista`,`a`.`assunto_id` AS `assunto_id`,`c`.`descricao` AS `assunto`,`a`.`status_id` AS `status_id`,`d`.`nome` AS `status`,`a`.`numero` AS `numero`,`a`.`descricao` AS `descricao`,`a`.`observacao` AS `observacao`,`a`.`dt_criacao` AS `dt_criacao` from ((((`processo` `a` join `requerente` `b` on((`a`.`requerente_id` = `b`.`id`))) join `assunto` `c` on((`a`.`assunto_id` = `c`.`id`))) join `status` `d` on((`a`.`status_id` = `d`.`id`))) left join `usuario` `e` on((`a`.`usuario_id` = `e`.`id`))) order by `a`.`dt_criacao`;
 
 --
--- Estrutura para vista `vw_requerente`
+-- Definition of view `vw_requerente`
 --
+
 DROP TABLE IF EXISTS `vw_requerente`;
+DROP VIEW IF EXISTS `vw_requerente`;
+CREATE ALGORITHM=UNDEFINED  SQL SECURITY DEFINER VIEW `vw_requerente` AS select `a`.`id` AS `id`,`a`.`nome` AS `nome`,`a`.`cpf` AS `cpf`,`a`.`telefone` AS `telefone`,`a`.`email` AS `email`,`a`.`senha` AS `senha`,date_format(`a`.`dt_aniversario`,'%d-%m-%Y') AS `dt_aniversario` from `requerente` `a` where ((1 = 1) and (`a`.`ativo` = 1));
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_requerente`  AS  select `a`.`id` AS `id`,`a`.`nome` AS `nome`,`a`.`cpf` AS `cpf`,`a`.`telefone` AS `telefone`,`a`.`email` AS `email`,`a`.`senha` AS `senha`,date_format(`a`.`dt_aniversario`,'%d-%m-%Y') AS `dt_aniversario` from `requerente` `a` where ((1 = 1) and (`a`.`ativo` = 1)) ;
 
---
--- Restrições para despejos de tabelas
---
 
---
--- Limitadores para a tabela `log_processo`
---
-ALTER TABLE `log_processo`
-  ADD CONSTRAINT `fk_log_processo_processo1` FOREIGN KEY (`processo_id`) REFERENCES `processo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_log_processo_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Limitadores para a tabela `processo`
---
-ALTER TABLE `processo`
-  ADD CONSTRAINT `fk_processo_assunto1` FOREIGN KEY (`assunto_id`) REFERENCES `assunto` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_processo_requerente1` FOREIGN KEY (`requerente_id`) REFERENCES `requerente` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_processo_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_processo_usuario1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Limitadores para a tabela `usuario`
---
-ALTER TABLE `usuario`
-  ADD CONSTRAINT `fk_usuario_perfil1` FOREIGN KEY (`perfil_id`) REFERENCES `perfil` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_usuario_setor1` FOREIGN KEY (`setor_id`) REFERENCES `setor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-COMMIT;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
